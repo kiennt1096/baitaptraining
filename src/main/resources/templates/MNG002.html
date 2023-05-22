@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" th:src="@{/javascript/mng002.js}"></script>
+    <title>ユーザ管理</title>
+</head>
+<body>
+<!-- Begin vung header -->
+<div>
+    <div>
+        <table>
+            <tr>
+                <td width="80%"><img th:src="@{/images/logo-manager-user.gif}" alt="TestProject"/>
+                <td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <a th:href="@{/top}" class="button-normal">トップ</a>
+                    <a class="button-normal" type="button" onclick="directToEditPage()">新規追加</a>
+                    <a th:href="@{/logout}" class="button-danger">ログアウト</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- End vung header -->
+
+<!-- Begin vung dieu kien tim kiem -->
+<form th:action="@{/top}" method="post" name="mainform">
+    <table class="tbl_input" border="0" width="90%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                会員名称で会員を検索します。検索条件無しの場合は全て表示されます。
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                <table class="tbl_input" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td class="lbl_left">氏名:</td>
+                        <td align="left">
+                            <input class="textbox" type="text" name="searchName" th:value="${searchName}"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl_left">グループ:</td>
+                        <td align="left" width="80px">
+                            <select name="groupid" class="dropdown">
+                                <option value="0">全て</option>
+                                <option value="1">Group 1</option>
+                                <option value="2">Group 2</option>
+                                <option value="3">Group 3</option>
+                                <option value="4">Group 4</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <input class="button-normal" type="submit" value="検 索"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!-- End vung dieu kien tim kiem -->
+</form>
+<br/>
+<br/>
+<!-- Begin vung hien thi danh sach user -->
+<table class="tbl_list" border="1" cellpadding="4" cellspacing="0" width="80%">
+    <thead>
+    <tr class="tr2">
+        <th align="center" width="20px">
+            ID
+        </th>
+        <th align="left">
+            氏名 <a th:href="@{'/page/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir}}">▲▽</a>
+        </th>
+        <th align="left">
+            生年月日
+        </th>
+        <th align="left">
+            グループ
+        </th>
+        <th align="left">
+            メールアドレス
+        </th>
+        <th align="left" width="70px">
+            電話番号
+        </th>
+        <th align="left">
+            日本語能力 <a
+                th:href="@{'/page/' + ${currentPage} + '?sortField=detailUser.japaneseLevel&sortDir=' + ${reverseSortDir}}">▲▽</a>
+        </th>
+        <th align="left">
+            失効日 <a
+                th:href="@{'/page/' + ${currentPage} + '?sortField=detailUser.endDate&sortDir=' + ${reverseSortDir}}">▲▽</a>
+        </th>
+        <th align="left">
+            点数
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="user : ${userList}">
+        <td><a th:href="@{/showformUpdate/{id}(id=${user.user_id})}" th:text="${user.user_id}"></a></td>
+        <td th:text="${user.fullName}"></td>
+        <td th:text="${user.birthday}"></td>
+        <td th:text="${user.group.groupName}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.tel}"></td>
+        <td th:text="${user.detailUser.japaneseLevel.nameLevel}"></td>
+        <td th:text="${user.detailUser.endDate}"></td>
+        <td th:text="${user.detailUser.total}"></td>
+    </tr>
+    </tbody>
+
+
+</table>
+<!-- End vung hien thi danh sach user -->
+
+<!-- Begin vung paging -->
+<!--<table>-->
+<!--    <tr>-->
+<!--        <td class = "lbl_paging"><a href = "#">1</a> &nbsp;<a href = "#">2</a> &nbsp;<a href = "#">3</a>&nbsp;<a href = "#">>></a></td>-->
+<!--    </tr>-->
+<!--</table>-->
+<br/>
+<br/>
+<div th:if="${totalPages > 1}">
+    <div>
+        <div>
+            全部で: [[${totalItems}]]　件
+        </div>
+        <div>
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}"
+                           th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+        </div>
+        <div>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">次のページへ</a>
+            <span th:unless="${currentPage < totalPages}">次のページへ</span>
+        </div>
+
+        <div>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">最後のページへ</a>
+            <span th:unless="${currentPage < totalPages}">最後のページへ</span>
+        </div>
+    </div>
+</div>
+<!-- End vung paging -->
+
+<!-- Begin vung footer -->
+<div class="lbl_footer">
+    <br><br><br><br>
+    Copyright ©　2010　株式会社. All rights reserved.
+</div>
+<!-- End vung footer -->
+
+
+</body>
+
+</html>

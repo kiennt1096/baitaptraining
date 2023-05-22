@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th = "http://www.thymleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" th:src="@{/javascript/mng001.js}"></script>
+    <title>ユーザ管理</title>
+</head>
+<body class="login-body">
+<form th:action="@{/login}" method="post" onsubmit="return onSubmitLoginPage();">
+        <table class="tbl_input" cellpadding="4" cellspacing="0" width="400px">
+            <tr>
+                <th width="120px">&nbsp;</th><th></th>
+            </tr>
+            <tr>
+                <th colspan="2" align="left">アカウント名およびパスワードを入力してください</th>
+
+            </tr>
+            <tr>
+                <th colspan="2" align="left">
+                    <div id="errorMessage" style="color:red;"></div>
+                    <div th:if="${param.error}" style="color:red;">「アカウント名」または「パスワード」は不正です。</div>
+                </th>
+            </tr>
+
+            <tr align="left">
+                <td class="lbl_left">アカウント名:</td>
+                <td align="left">
+                    <input class="textbox" id="username" type="text" name="username" value="" size="20" onfocus="this.style.borderColor='#0066ff';"
+                           onblur="this.style.borderColor='#aaaaaa';" />
+                </td>
+            </tr>
+            <tr>
+                <td class="lbl_left">パスワード:</td>
+                <td align="left">
+                    <input class="textbox" id="password" type="password" name="password" value=""	size="22" onfocus="this.style.borderColor='#0066ff';"
+                           onblur="this.style.borderColor='#aaaaaa';" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="right">
+                    <input type="submit" class="button-normal" value="ログイン"/>
+                </td>
+            </tr>
+        </table>
+</form>
+</body>
+</html>
