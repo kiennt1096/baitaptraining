@@ -20,13 +20,13 @@ public interface UserService {
 
     void deleteUserById(Integer id);
 
-    List<User> findUserByName(String name);
+//    List<User> findUserByName(String name);
+//
+//    List<User> findUserByGroup(Integer groupid);
+//
+//    List<User> findUserByNameAndGroup(String name, Integer groupid);
 
-    List<User> findUserByGroup(Integer groupid);
-
-    List<User> findUserByNameAndGroup(String name, Integer groupid);
-
-    Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
+    Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String fullname, Integer groupId);
 
 
 }

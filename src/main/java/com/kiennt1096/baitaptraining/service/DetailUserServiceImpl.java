@@ -27,9 +27,19 @@ public class DetailUserServiceImpl implements DetailUserService {
 
     @Override
     public DetailUser saveDetailUser(DetailUser detailUser) {
-        System.out.println("Done detailUserService.saveDetailUser(detailUser);");
+        //System.out.println("Done detailUserService.saveDetailUser(detailUser);");
         return this.detailUserRepository.save(detailUser);
 
+    }
+
+    @Override
+    public DetailUser updateDetailUser(Integer id, DetailUser updatedDetailUser) {
+        DetailUser detailUser = getDetailUserById(id);
+        detailUser.setJapaneseLevel(updatedDetailUser.getJapaneseLevel());
+        detailUser.setStartDate(updatedDetailUser.getStartDate());
+        detailUser.setEndDate(updatedDetailUser.getEndDate());
+        detailUser.setTotal(updatedDetailUser.getTotal());
+        return this.detailUserRepository.save(detailUser);
     }
 
     @Override

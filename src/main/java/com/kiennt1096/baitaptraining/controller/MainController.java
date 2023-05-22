@@ -39,16 +39,23 @@ public class MainController {
         return "MNG001";
     }
 
+//    @GetMapping("/top")
+//    public String topPage(Model model) {
+//        return findPaginated(1, "fullName", "asc", "", 0, model);
+//    }
+
     @GetMapping("/top")
-    public String topPage(Model model) {
-        return findPaginated(1, "fullName", "asc", model);
-    }
+    private String findPaginated(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+                                 @RequestParam(value = "sortField", defaultValue = "fullName") String sortField,
+                                 @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
+                                 @RequestParam(value = "searchName", defaultValue = "") String searchName,
+                                 @RequestParam(value = "groupid", defaultValue = "0") Integer groupid,
+                                 Model model) {
 
-    @GetMapping("/page/{pageNo}")
-    private String findPaginated(@PathVariable(value = "pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir, Model model) {
         int pageSize = 5;
-
-        Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        System.out.println(searchName);
+        System.out.println(groupid);
+        Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir, searchName, groupid);
         List<User> listUser = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
@@ -57,26 +64,98 @@ public class MainController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("searchName", searchName);
+        model.addAttribute("groupid", groupid);
+
 
         model.addAttribute("userList", listUser);
         return "MNG002";
     }
 
-    @PostMapping("/top")
-    public String searchUser(Model model, @RequestParam("searchName") String searchName, @RequestParam("groupid") Integer groupid) {
-        List<User> userList;
-        if (searchName != "" && groupid != 0) {
-            userList = userService.findUserByNameAndGroup(searchName, groupid);
-        } else if (searchName != "" && groupid == 0) {
-            userList = userService.findUserByName(searchName);
-        } else if (searchName == "" && groupid != 0) {
-            userList = userService.findUserByGroup(groupid);
-        } else {
-            userList = userService.getAllUser();
-        }
-        model.addAttribute("userList", userList);
-        return "MNG002";
-    }
+//    @PostMapping("/top")
+//    public String searchUser(@PathVariable(value = "pageNo") int pageNo,
+//                             @RequestParam(value = "sortField") String sortField,
+//                             @RequestParam("sortDir") String sortDir,
+//                             @RequestParam("searchName") String searchName,
+//                             @RequestParam("groupid") Integer groupid,
+//                             Model model) {
+////        List<User> userList;
+////        if (searchName != "" && groupid != 0) {
+////            userList = userService.findUserByNameAndGroup("%" + searchName + "%", groupid);
+////        } else if (searchName != "" && groupid == 0) {
+////            userList = userService.findUserByName("%" + searchName + "%");
+////        } else if (searchName == "" && groupid != 0) {
+////            userList = userService.findUserByGroup(groupid);
+////        } else {
+////            userList = userService.getAllUser();
+////        }
+//        if (searchName != "" && groupid != 0) {
+////            int pageSize = 5;
+////            Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir, searchName, groupid);
+////            List<User> listUser = page.getContent();
+////
+////            model.addAttribute("currentPage", pageNo);
+////            model.addAttribute("totalPages", page.getTotalPages());
+////            model.addAttribute("totalItems", page.getTotalElements());
+////            model.addAttribute("sortField", sortField);
+////            model.addAttribute("sortDir", sortDir);
+////            model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+////
+////            model.addAttribute("userList", listUser);
+////            return "MNG002";
+//            return findPaginated(1, "fullName", "asc", searchName, groupid, model);
+//        } else {
+//            return findPaginated(1, "fullName", "asc", searchName, 0, model);
+////            int pageSize = 5;
+////            Page<User> page = userService.findPaginated(pageNo, pageSize, sortField, sortDir, "", 0);
+////            List<User> listUser = page.getContent();
+////            model.addAttribute("currentPage", pageNo);
+////            model.addAttribute("totalPages", page.getTotalPages());
+////            model.addAttribute("totalItems", page.getTotalElements());
+////            model.addAttribute("sortField", sortField);
+////            model.addAttribute("sortDir", sortDir);
+////            model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+////
+////            model.addAttribute("userList", listUser);
+////            return "MNG002";
+//        }
+//    }
+//
+////    @GetMapping("/page/{pageNo}")
+////    public String findAndSearchPaginated(@PathVariable(value = "pageNo") int pageNo,
+////                                         @RequestParam(value = "sortField") String sortField,
+////                                         @RequestParam("sortDir") String sortDir,
+////                                         @RequestParam(value = "searchName", required = false) String searchName,
+////                                         @RequestParam(value = "groupid", required = false) Integer groupId,
+////                                         Model model) {
+////        int pageSize = 5;
+////        Page<User> page;
+////        List<User> userList;
+////
+////        if (searchName != null && groupId != null) {
+////            page = userService.findPaginatedByNameAndGroup(pageNo, pageSize, sortField, sortDir, "%" + searchName + "%", groupId);
+////            userList = userService.findUserByNameAndGroup("%" + searchName + "%", groupId);
+////        } else if (searchName != null) {
+////            page = userService.findPaginatedByName(pageNo, pageSize, sortField, sortDir, "%" + searchName + "%");
+////            userList = userService.findUserByName("%" + searchName + "%");
+////        } else if (groupId != null) {
+////            page = userService.findPaginatedByGroup(pageNo, pageSize, sortField, sortDir, groupId);
+////            userList = userService.findUserByGroup(groupId);
+////        } else {
+////            page = userService.findPaginated(pageNo, pageSize, sortField, sortDir);
+////            userList = userService.getAllUser();
+////        }
+////
+////        model.addAttribute("currentPage", pageNo);
+////        model.addAttribute("totalPages", page.getTotalPages());
+////        model.addAttribute("totalItems", page.getTotalElements());
+////        model.addAttribute("sortField", sortField);
+////        model.addAttribute("sortDir", sortDir);
+////        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+////        model.addAttribute("userList", userList);
+////
+////        return "MNG002";
+////    }
 
 
     @GetMapping("/addnewuser")

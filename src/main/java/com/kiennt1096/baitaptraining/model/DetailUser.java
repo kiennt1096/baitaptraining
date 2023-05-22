@@ -42,9 +42,6 @@ public class DetailUser {
         return detailUserId;
     }
 
-    public void setDetailUserId(Integer detailUserId) {
-        this.detailUserId = detailUserId;
-    }
 
     public JapaneseLevel getJapaneseLevel() {
         return japaneseLevel;

@@ -6,6 +6,8 @@ public interface DetailUserService {
     DetailUser getDetailUserById(Integer detailUserId);
 
     DetailUser saveDetailUser(DetailUser detailUser);
+    DetailUser updateDetailUser(Integer id, DetailUser updatedDetailUser);
 
     void deleteDetailUserById(Integer id);
+
 }

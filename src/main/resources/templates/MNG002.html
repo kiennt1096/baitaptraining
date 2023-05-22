@@ -30,7 +30,7 @@
 <!-- End vung header -->
 
 <!-- Begin vung dieu kien tim kiem -->
-<form th:action="@{/top}" method="post" name="mainform">
+<form th:action="@{/top}" method="get" name="mainform">
     <table class="tbl_input" border="0" width="90%" cellpadding="0" cellspacing="0">
         <tr>
             <td>
@@ -56,11 +56,11 @@
                         <td class="lbl_left">グループ:</td>
                         <td align="left" width="80px">
                             <select name="groupid" class="dropdown">
-                                <option value="0">全て</option>
-                                <option value="1">Group 1</option>
-                                <option value="2">Group 2</option>
-                                <option value="3">Group 3</option>
-                                <option value="4">Group 4</option>
+                                <option value="0" th:selected="${groupid == 0}">全て</option>
+                                <option value="1" th:selected="${groupid == 1}">Group 1</option>
+                                <option value="2" th:selected="${groupid == 2}">Group 2</option>
+                                <option value="3" th:selected="${groupid == 3}">Group 3</option>
+                                <option value="4" th:selected="${groupid == 4}">Group 4</option>
                             </select>
                         </td>
 
@@ -86,7 +86,7 @@
             ID
         </th>
         <th align="left">
-            氏名 <a th:href="@{'/page/' + ${currentPage} + '?sortField=fullName&sortDir=' + ${reverseSortDir}}">▲▽</a>
+            氏名 <a th:href="@{'/top?pageNo=' + ${currentPage} + '&sortField=fullName&sortDir=' + ${reverseSortDir} + '&searchName=' + ${searchName} + '&groupid=' + ${groupid}}">▲▽</a>
         </th>
         <th align="left">
             生年月日
@@ -102,11 +102,11 @@
         </th>
         <th align="left">
             日本語能力 <a
-                th:href="@{'/page/' + ${currentPage} + '?sortField=detailUser.japaneseLevel&sortDir=' + ${reverseSortDir}}">▲▽</a>
+                th:href="@{'/top?pageNo=' + ${currentPage} + '&sortField=detailUser.japaneseLevel&sortDir=' + ${reverseSortDir} + '&searchName=' + ${searchName} + '&groupid=' + ${groupid}}">▲▽</a>
         </th>
         <th align="left">
-            失効日 <a
-                th:href="@{'/page/' + ${currentPage} + '?sortField=detailUser.endDate&sortDir=' + ${reverseSortDir}}">▲▽</a>
+            失効日 <a detailUser.endDate
+                th:href="@{'/top?pageNo=' + ${currentPage} + '&sortField=detailUser.endDate&sortDir=' + ${reverseSortDir} + '&searchName=' + ${searchName} + '&groupid=' + ${groupid}}">▲▽</adetailUser.endDate>
         </th>
         <th align="left">
             点数

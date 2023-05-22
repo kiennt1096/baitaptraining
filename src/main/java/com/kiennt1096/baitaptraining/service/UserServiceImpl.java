@@ -74,7 +74,8 @@ public class UserServiceImpl implements UserService {
         user.setTel(updatedUser.getTel());
         user.setBirthday(updatedUser.getBirthday());
         //user.setDetailUser(updatedUser.getDetailUser());
-        DetailUser detailUser = detailUserService.saveDetailUser(updatedUser.getDetailUser());
+//        DetailUser detailUser = detailUserService.saveDetailUser(updatedUser.getDetailUser());
+        DetailUser detailUser = detailUserService.updateDetailUser(id, updatedUser.getDetailUser());
         user.setDetailUser(detailUser);
         return userRepository.save(user);
     }
@@ -84,31 +85,52 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(id);
     }
 
-    @Override
-    public List<User> findUserByName(String name) {
-        System.out.println(name);
-        if (name != null && name != "") {
-            return this.userRepository.findByName(name);
-        } else {
-            return this.userRepository.findAll();
-        }
-    }
+//    @Override
+//    public List<User> findUserByName(String name) {
+//        System.out.println(name);
+//        if (name != null && name != "") {
+//            return this.userRepository.findByName(name);
+//        } else {
+//            return this.userRepository.findAll();
+//        }
+//    }
+//
+//    @Override
+//    public List<User> findUserByGroup(Integer groupid) {
+//        return this.userRepository.findByGroup(groupid);
+//    }
+//
+//    @Override
+//    public List<User> findUserByNameAndGroup(String name, Integer groupid) {
+//        return this.userRepository.findByNameAndGroup(name, groupid);
+//    }
 
     @Override
-    public List<User> findUserByGroup(Integer groupid) {
-        return this.userRepository.findByGroup(groupid);
-    }
-
-    @Override
-    public List<User> findUserByNameAndGroup(String name, Integer groupid) {
-        return this.userRepository.findByNameAndGroup(name, groupid);
-    }
-
-    @Override
-    public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String fullname, Integer groupId) {
+//        if (groupId == 0) {
+//            Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+//            Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+//            return  this.userRepository.findAll(pageable);
+//        }
+//        else {
+//            Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+//            Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+//            return this.userRepository.findByFullNameLikeAndGroupGroupId(fullname, groupId, pageable);
+//        }
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.userRepository.findAll(pageable);
+        if (!fullname.equals("") && groupId != 0) {
+            return this.userRepository.findByFullNameLikeAndGroupGroupId("%" + fullname + "%", groupId, pageable);
+        }
+        else if (!fullname.equals("") && groupId == 0) {
+            return this.userRepository.findByFullNameLike("%" + fullname + "%", pageable);
+        }
+        else if (fullname.equals("") && groupId != 0) {
+            return this.userRepository.findByGroupGroupId(groupId, pageable);
+        }
+        else {
+            return this.userRepository.findAll(pageable);
+        }
     }
 
 }
